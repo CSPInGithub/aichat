@@ -17,7 +17,7 @@ chat = model.start_chat(
 
 # Streamlit app interface
 st.title("Chat with Shekhar AI..powered by gemini-1.5-flash")
-st.write("Type your message below:")
+# st.write("Type your message below:")
 
 # Initialize the session state for storing chat history
 if "history" not in st.session_state:

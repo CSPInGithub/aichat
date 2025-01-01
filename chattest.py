@@ -32,28 +32,27 @@ for message in st.session_state.history:
     if role == "user":
         with st.chat_message("user"):
             st.markdown(text)
-        # User message styled in black
-        # st.markdown(f'<p style="color:black;"><b>You</b>: {text}</p>', unsafe_allow_html=True)
     else:
         with st.chat_message("assistant"):
             st.markdown(text)
+
 # Input box for user message
 user_input = st.text_area("Your message:")
 
 # Send button to process the message
-if st.button("Send"):
-    if user_input.strip():  # Ensure the input is not empty or just whitespace
-        # Add user's message to the history
-        st.session_state.history.append({"role": "user", "parts": user_input.strip()})
+if st.button("Send") and user_input.strip():  # Ensure the input is not empty or just whitespace
+    # Add user's message to the history
+    st.session_state.history.append({"role": "user", "parts": user_input.strip()})
 
-        try:
-            # Send the message to the AI and get the response
-            response = chat.send_message(user_input.strip())
+    try:
+        # Send the message to the AI and get the response
+        response = chat.send_message(user_input.strip())
 
-            # Add AI's response to the history
-            st.session_state.history.append({"role": "model", "parts": response.text})
-        except Exception as e:
-            st.write(f"Error sending message: {e}")
+        # Add AI's response to the history
+        st.session_state.history.append({"role": "model", "parts": response.text})
+    except Exception as e:
+        # Add error message to the history for better debugging
+        st.session_state.history.append({"role": "model", "parts": f"Error: {e}"})
 
-        # Re-run the app to refresh the chat window and clear the input field
-        st.rerun()
+    # Clear the input field and refresh the app
+    st.rerun()

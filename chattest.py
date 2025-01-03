@@ -1,3 +1,4 @@
+import yt_dlp
 import streamlit as st
 import google.generativeai as genai
 import os
@@ -16,8 +17,7 @@ chat = model.start_chat(
 )
 
 # Streamlit app interface
-st.title("Chat with Shekhar AI..powered by gemini-1.5-flash")
-# st.write("Type your message below:")
+st.title("Chat with Shekhar AI - Powered by Gemini 1.5 Flash")
 
 # Initialize the session state for storing chat history
 if "history" not in st.session_state:
@@ -40,7 +40,7 @@ for message in st.session_state.history:
 user_input = st.text_area("Your message:")
 
 # Send button to process the message
-if st.button("Send") and user_input.strip():  # Ensure the input is not empty or just whitespace
+if st.button("Send") and user_input.strip():
     # Add user's message to the history
     st.session_state.history.append({"role": "user", "parts": user_input.strip()})
 
@@ -56,3 +56,39 @@ if st.button("Send") and user_input.strip():  # Ensure the input is not empty or
 
     # Clear the input field and refresh the app
     st.rerun()
+
+# Divider for additional feature
+st.divider()
+
+# Feature to download YouTube MP3
+st.subheader("Download YouTube MP3")
+
+# URL input and download button
+url = st.text_input("Enter YouTube URL:")
+if st.button("Download MP3") and url.strip():
+    # Get the Downloads folder path
+    downloads_folder = os.path.join(os.path.expanduser("~"), "Downloads")
+
+    # Ensure the Downloads folder exists
+    if not os.path.exists(downloads_folder):
+        os.makedirs(downloads_folder)
+
+    # yt-dlp options
+    ydl_opts = {
+        'outtmpl': os.path.join(downloads_folder, '%(title)s.%(ext)s'),  # Save in Downloads folder
+        'format': 'bestaudio/best',  # Download the best audio
+        'postprocessors': [
+            {
+                'key': 'FFmpegExtractAudio',  # Extract audio
+                'preferredcodec': 'mp3',     # Convert to MP3
+                'preferredquality': '192',   # Set MP3 quality
+            }
+        ],
+    }
+
+    try:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            ydl.download([url])
+        st.success(f"Downloaded MP3 saved to {downloads_folder}")
+    except Exception as e:
+        st.error(f"Failed to download: {e}")

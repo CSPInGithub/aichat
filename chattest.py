@@ -18,7 +18,7 @@ FFPROBE_PATH = os.path.join(BIN_DIR, "ffprobe.exe")
 st.title("Shekhar Chat -powered by Gemini AI & YouTube MP3 Downloader")
 
 # Tabs for separate functionalities
-tab1, tab2 = st.tabs(["💬 Chat with AI", "🎵 YouTube MP3 Downloader"])
+tab1, tab2 = st.tabs(["💬 Chat with AI", "🎵 YouTube MP3 Downloader[*Works on Windows OS]"])
 
 # Tab 1: Chat with AI
 with tab1:
